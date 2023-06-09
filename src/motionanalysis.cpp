@@ -111,20 +111,25 @@ namespace libmotioncapture {
         for (int iBody = 0; iBody < pFrameOfData.nBodies; iBody++) {
             sBodyData *Body = &pFrameOfData.BodyData[iBody];
 
-            float centroid[3] = {0, 0, 0};
+            float* frontMarker = Body->Markers[0];
+            float* leftMarker = Body->Markers[1];
+            float* rightMarker = Body->Markers[2];
 
-            for (int iMarker = 0; iMarker < Body->nMarkers; iMarker++) {
-                centroid[0] += Body->Markers[iMarker][0];
-                centroid[1] += Body->Markers[iMarker][1];
-                centroid[2] += Body->Markers[iMarker][2];
-            }
+            // Calculate centroid as the middle point between the left and right markers
+            Eigen::Vector3f centroid((leftMarker[0] + rightMarker[0]) / 2,
+                                     (leftMarker[1] + rightMarker[1]) / 2,
+                                     (leftMarker[2] + rightMarker[2]) / 2);
 
-            centroid[0] /= (float) Body->nMarkers;
-            centroid[1] /= (float) Body->nMarkers;
-            centroid[2] /= (float) Body->nMarkers;
+            const Eigen::Vector3f& position = centroid;
 
-            Eigen::Vector3f position(centroid[0], centroid[1], centroid[2]);
-            Eigen::Quaternionf rotation = Eigen::Quaternionf::Identity();
+            // Find the pose of the rigid body by using the front marker as the forward direction
+            Eigen::Vector3f forward(frontMarker[0] - centroid[0],
+                                    frontMarker[1] - centroid[1],
+                                    frontMarker[2] - centroid[2]);
+
+            Eigen::Vector3f groundTruth(1, 0, 0);
+
+            Eigen::Quaternionf rotation = Eigen::Quaternionf::FromTwoVectors(groundTruth, forward);
 
             char *bodyName = Body->szName;
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
 import subprocess
+import sys
 
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
@@ -53,12 +53,12 @@ class CMakeBuild(build_ext):
             # Users can override the generator with CMAKE_GENERATOR in CMake
             # 3.15+.
             if not cmake_generator:
-                cmake_args += ["-GNinja"]
+                cmake_args += ["-GUnix Makefiles"]
 
         else:
 
             # Single config generators are handled "normally"
-            single_config = any(x in cmake_generator for x in {"NMake", "Ninja"})
+            single_config = any(x in cmake_generator for x in {"NMake", "Make"})
 
             # CMake allows an arch-in-generator style for backward compatibility
             contains_arch = any(x in cmake_generator for x in {"ARM", "Win64"})

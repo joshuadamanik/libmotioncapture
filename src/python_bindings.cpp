@@ -55,10 +55,10 @@ PYBIND11_MODULE(motioncapture, m) {
       .def_property_readonly("rigidBodies", &MotionCapture::rigidBodies);
 
   //
-  py::class_<MotionCaptureOptitrack>(m, "MotionCaptureOptitrack")
-      .def(py::init<const std::string &>())
-      .def("waitForNextFrame", &MotionCaptureOptitrack::waitForNextFrame, py::call_guard<py::gil_scoped_release>())
-      .def_property_readonly("rigidBodies", &MotionCaptureOptitrack::rigidBodies);
+//  py::class_<MotionCaptureOptitrack>(m, "MotionCaptureOptitrack")
+//      .def(py::init<const std::string &>())
+//      .def("waitForNextFrame", &MotionCaptureOptitrack::waitForNextFrame, py::call_guard<py::gil_scoped_release>())
+//      .def_property_readonly("rigidBodies", &MotionCaptureOptitrack::rigidBodies);
 
   // // Packet
   // py::class_<Packet>(m, "Packet", py::buffer_protocol())
